@@ -6,5 +6,6 @@
     </hezd>
     <body>
         <h1>Site de vente et location des véhicules</h1>
+        <h2>Soyez le bienvenu</h2>
     </body>
 </html>
