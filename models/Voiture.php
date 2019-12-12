@@ -110,5 +110,65 @@ class Voiture
         return $this->id_utilisateur;
     }
 
+    public static function AjoutVoiture($id, $numeroplaque, $model, $marque, $couleur, $photo, $prix, $etat, $id_utilisateur){ //foction de l'ajout d'une voiture dans la bdd
+        try{
+            $pdo_connexion = Connexion::GetConnexion();
+            $pdo_query = "INSERT INTO voiture VALUES ('','$numeroplaque','$model','$marque','$couleur','$photo'.'$prix'.'$etat'.'$id_utilisateur')";
+            $pdo_result = $pdo_connexion->prepare($pdo_query);
+            $pdo_result->execute();
+            $tableau = array();
+            if($pdo_result != NULL){
+                while ($ob = $pdo_result->fetch(PDO::FETCH_OBJ) ){
+                    $tableau[] = new Voiture($ob->id, $ob->numeroplaque, $ob->model, $ob->marque, $ob->couleur, $ob->photo, $ob->prix, $ob->etat, $ob->id_utilisateur);
+                }
+            }
+            return $tableau;
 
+        }catch (PDOException $e){
+
+        }
+
+    }
+
+    public static function AfficharVoiture(){ //fonction permettant d'afficher une voiture
+        try{
+            $pdo_connexion = Connexion::GetConnexion();
+            $pdo_query = "SELECT * FROM voiture ";
+            $pdo_result = $pdo_connexion->prepare($pdo_query);
+            $pdo_result->execute();
+            $tableau = array();
+            if($pdo_result != NULL){
+                while ($ob = $pdo_result->fetch(PDO::FETCH_OBJ) ){
+                    $tableau[] = new Voiture($ob->id, $ob->numeroplaque, $ob->model, $ob->marque, $ob->couleur, $ob->photo, $ob->prix, $ob->etat, $ob->id_utilisateur);
+                }
+            }
+            return $tableau;
+
+        }catch (PDOException $e){
+
+        }
+
+    }
+
+    public static function ModifierVoiture($id, $etat){ //fonction qui permet de changer l'état d'une voiture soit à vendre ou à louer
+        try{
+            $pdo_connexion = Connexion::GetConnexion();
+            $pdo_query = "UPDATE voiture SET etat = '$etat' WHERE id = '$id'  ";
+            $pdo_result = $pdo_connexion->prepare($pdo_query);
+            $pdo_result->execute();
+            $tableau = array();
+            if($pdo_result != NULL){
+                while ($ob = $pdo_result->fetch(PDO::FETCH_OBJ) ){
+                    $tableau[] = new Voiture($ob->id, $ob->numeroplaque, $ob->model, $ob->marque, $ob->couleur, $ob->photo, $ob->prix, $ob->etat, $ob->id_utilisateur);
+                }
+            }
+            return $tableau;
+
+        }catch (PDOException $e){
+
+        }
+
+    }
+
+    
 }

@@ -97,7 +97,7 @@ class Utilisateur
 
     }
 
-    public static function Enregistre($id, $prenom, $nom, $email, $password, $photo){ //foction de l'ajout d'un utilisateur dans la bdd
+    public static function Enregistre($id, $prenom, $nom, $email, $password, $photo){ //fonction de l'ajout d'un utilisateur dans la bdd
         try{
             $pdo_connexion = Connexion::GetConnexion();
             $pdo_query = "INSERT INTO utilisateur VALUES ('','$prenom','$nom','$email','$password','$photo')";
@@ -117,4 +117,23 @@ class Utilisateur
 
     }
 
+    public static function AfficherUtilisateur(){//fonction permettant d'afficher les utilisateurs
+        try{
+            $pdo_connexion = Connexion::GetConnexion();
+            $pdo_query = "SELECT * FROM utilisateur ";
+            $pdo_result = $pdo_connexion->prepare($pdo_query);
+            $pdo_result->execute();
+            $tableau = array();
+            if($pdo_result != NULL){
+                while ($ob = $pdo_result->fetch(PDO::FETCH_OBJ) ){
+                    $tableau[] = new Utilisateur($ob->id, $ob->prenom, $ob->nom, $ob->email, $ob->password, $ob->photo);
+                }
+            }
+            return $tableau;
+
+        }catch (PDOException $e){
+
+        }
+
+    }
 }
