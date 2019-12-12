@@ -170,5 +170,38 @@ class Voiture
 
     }
 
-    
+    //fonction permettant la suppression d'une voiture
+    public static function SupprimerVoiture($id){
+        try{
+            $pdo_connexion = Connexion::GetConnexion();
+            $pdo_query = "DELETE FROM voiture WHERE id = '$id'";
+            $pdo_result = $pdo_connexion->prepare($pdo_query);
+            $pdo_result->execute();
+
+        }catch (PDOException $e){
+
+        }
+
+    }
+
+    public static function AfficharProiprietaire($id,$id_utilisateur){ //fonction permettant d'afficher le p
+        try{
+            $pdo_connexion = Connexion::GetConnexion();
+            $pdo_query = "SELECT id_utilisateur FROM voiture WHERE id = '$id'";
+            $pdo_result = $pdo_connexion->prepare($pdo_query);
+            $pdo_result->execute();
+            $tableau = array();
+            if($pdo_result != NULL){
+                while ($ob = $pdo_result->fetch(PDO::FETCH_OBJ) ){
+                    $tableau[] = new Voiture($ob->id, $ob->numeroplaque, $ob->model, $ob->marque, $ob->couleur, $ob->photo, $ob->prix, $ob->etat, $ob->id_utilisateur);
+                }
+            }
+            return $tableau;
+
+        }catch (PDOException $e){
+
+        }
+
+    }
+
 }

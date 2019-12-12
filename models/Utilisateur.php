@@ -97,6 +97,28 @@ class Utilisateur
 
     }
 
+    //vérifie si un email est déjà utilisée ou pas
+    public static function VerifierLogin($email){
+        try{
+            $pdo_connexion = Connexion::GetConnexion();
+            $pdo_query = "SELECT * FROM utilisateur WHERE email = '$email'";
+            $pdo_result = $pdo_connexion->prepare($pdo_query);
+            $pdo_result->execute();
+            $tableau = array();
+            if($pdo_result != NULL){
+                while ($ob = $pdo_result->fetch(PDO::FETCH_OBJ) ){
+                    $tableau[] = new Utilisateur($ob->id, $ob->prenom, $ob->nom, $ob->email, $ob->password, $ob->photo);
+                }
+            }
+            return $tableau;
+
+        }catch (PDOException $e){
+
+        }
+
+    }
+
+
     public static function Enregistre($id, $prenom, $nom, $email, $password, $photo){ //fonction de l'ajout d'un utilisateur dans la bdd
         try{
             $pdo_connexion = Connexion::GetConnexion();
@@ -136,4 +158,18 @@ class Utilisateur
         }
 
     }
+    //fonction permettant la suppression d'un utilisateur
+    public static function SupprimerUtilisateur($id){
+        try{
+            $pdo_connexion = Connexion::GetConnexion();
+            $pdo_query = "DELETE FROM utilisateur WHERE id = '$id'";
+            $pdo_result = $pdo_connexion->prepare($pdo_query);
+            $pdo_result->execute();
+
+        }catch (PDOException $e){
+
+        }
+
+    }
+
 }
